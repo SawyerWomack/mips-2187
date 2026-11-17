@@ -7,9 +7,12 @@
 # ---- gd.matrix ----
 # "What it holds: The board, flat. Cell at row r, column c is gd.matrix[r * 4 + c]"
 matrix = [0] * 16
+# You can initilize your own matrix for testing:
+# matrix = [1, 2, 1, 2, 2, 1, 2, 1, 1, 2, 1, 2 , 2, 1, 2, 1]
+
 
 # ---- gd.score ----
- # "What it holds: The board, flat. Cell at row r, column c is gd.matrix[r * 4 + c]"
+ # "What it holds: The current game score"
 score = 0 
 
 # ---- gd.theme ----
@@ -18,16 +21,17 @@ theme = 0
 
 # ---- high_scores ----
 #"What it holds: Top 5 scores, highest first". Initilized to all 0's. Descending order must be maintained
-high_scores = list(range(5)) 
+high_scores = [0] * 5
+
 
 # ---- gd.pow3 ----
  # "What it holds: index to value conversion - so points never need a power function".
  # To get the value of a cell in memory, do gd.pow3[cellVal] ---> ex: gd.pow3[3] = 3^3 = 27 
-pow3 = [0, 3, 9, 27, 81, 243, 729, 2187]
+pow3 = [0, 3, 9, 27, 81, 243, 729, 2187, 6561, 19683, 59049, 177147]
 
 # --------- Constants ---------
 
-WIN_EXP = 7 # value a cell has to reach for the game to be won (because 3^7 = 2187)
+WIN_EXP = 11 # value a cell has to reach for the game to be won (because 3^11 = 177147)
 
 # Key input directions (enumeration where gd.LEFT=0, gd.RIGHT=1, gd.UP=2, gd.DOWN=3)
 LEFT = 0
@@ -36,7 +40,8 @@ UP = 2
 DOWN = 3
 
 # These are the game states - results of check_mat(),  (eunmeration where gd.QUIT=-2 gd.CONTINUE=0, gd.WIN=1, gd.LOSS=2)
-QUIT = -2
+QUIT_PROGRAM  = -3  # for quitting the program (ends execution)
+QUIT = -2           # for quitting a game (and going back to start screen)
 CONTINUE = 0
 WIN = 1
 LOSS = 2

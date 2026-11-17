@@ -1,8 +1,78 @@
+# ----------------- MAIN -----------------
+# Run this file to start the program!
+# ----------------------------------------
+
 # Levi
 
 import game_data as gd
+import input_keys as ik
+import start_screen as ss
+import matrix as mat
+import display as d
+import move as mov
+import score as s
+import check_mat as cm
 
+# main program method. begins on the start screen
+# params: none
+# return: none
 def main():
-    return 0 
+    while True:
+        # begin program on  start screen. this allows you to do valid start screen actions, it returns when you begin a game (hitting z)
+        command = ss.start_screen()
+        if command == gd.START_GAME:
+            playAgain = True
+            while playAgain:
+                playAgain = play_one_game()     # enter game loop. when game is over, playAgain is redetermined
+        elif command == gd.QUIT_PROGRAM:
+            break;
+
+
+# simulate one game of 2187
+# params: none
+# returns: Boolean, True if user decides to play again, False if user decides to quit (return to start screen)
 def play_one_game():
-    return 0 
+    print("*starting a game")
+    print("*valid keybinds: WASD to slide tiles, Q to quit game")
+    
+    mat.init_matrix()
+    d.print_matrix()
+
+    while True:
+        direction = ik.get_input()
+        if direction == gd.QUIT:
+            s.add_high_score(gd.score)
+            return 0
+
+        pointsFromMove = mov.move(direction)
+        gameState = cm.check_mat()
+
+        # you lost, end the game
+        if gameState == gd.LOSS:
+            d.you_lose()
+            s.add_high_score(gd.score)
+            return ik.wait_for_restart()
+
+        # you didn't lose, but move is not valid
+        if pointsFromMove == -1:
+            print("*invalid move")  # this is just for python version. need to dertermine how we want to show a move does nothing (or just do nothing?)
+            continue
+
+        # move was valid
+        s.update_score(pointsFromMove)
+        print("\n*current score: " + str(gd.score))
+
+        # check whether you won
+        if gameState == gd.WIN:
+            d.you_win()
+            s.add_high_score(gd.score)
+            return ik.wait_for_restart()
+        elif gameState == gd.CONTINUE:
+            mat.spawn_tile()
+            d.print_matrix()
+            ik.print_dir_moved(direction)
+            # while loop will run again, ready for the next move
+
+
+# BEGIN THE GAME!!!!!
+main()
